@@ -1,12 +1,16 @@
 {
 	"pages": [
 		{
-			"path": "pages/index/index"
+			"path": "pages/index/index",
+			"style": {
+				"enablePullDownRefresh": true
+			}
 		},
 		{
 			"path": "pages/category/index",
 			"style": {
-				"navigationBarTitleText": "商品分类"
+				"navigationBarTitleText": "商品分类",
+				"enablePullDownRefresh": true
 			}
 		},
 		{

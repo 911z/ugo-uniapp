@@ -127,6 +127,13 @@ export default {
 				}
 			})
 		}
+	},
+
+	// 监听下拉刷新
+	onPullDownRefresh() {
+		Promise.all([this.getSwiperDataFn(), this.getCateDataFn(), this.getFloorDataFn()]).then(() => {
+			uni.stopPullDownRefresh()
+		})
 	}
 }
 </script>
