@@ -8,52 +8,125 @@
 
 		<!-- 轮播图 -->
 		<view class="swiper-section">
-			<u-swiper class="swiper" :list="list1" indicator circular height="350rpx" />
+			<u-swiper class="swiper" :list="swiperData" indicator circular height="350rpx" @click="swiperClick" />
 		</view>
 
 		<!-- 选项卡 -->
 		<view class="tab-control">
-			<view class="item" v-for="item in list1" :key="item">
-				<image :src="item" />
+			<view class="item" v-for="item in cateItems" :key="item">
+				<navigator :url="item.navigator_url ? `/pages/category/index` : `/packone/goodsList/index`"
+					:open-type="item.open_type === 'switchTab' ? 'switchTab' : 'navigate'">
+					<image :src="item.image_src" />
+				</navigator>
 			</view>
 		</view>
 
 		<!-- 时尚女装 -->
 		<view class="title">
-			<image src="https://cdn.uviewui.com/uview/swiper/swiper1.png"></image>
+			<image :src="womanData.floor_title.image_src"></image>
 		</view>
 
 		<view class="women-section">
 			<view class="left-section">
-				<image src="https://cdn.uviewui.com/uview/swiper/swiper1.png"></image>
+				<image :src="womanData.product_list[0].image_src"></image>
 			</view>
 			<view class="right-section">
-				<view class="item" v-for="item in list1" :key="item">
-					<image :src="item" />
+				<view class="item" v-for="(item, index) in womanData.product_list" :key="item" v-if="index !== 0">
+					<image :src="item.image_src" />
 				</view>
 			</view>
 		</view>
+
+		<!-- 户外活动 -->
+		<view class="title">
+			<image :src="outDoorData.floor_title.image_src"></image>
+		</view>
+
+		<view class="women-section">
+			<view class="left-section">
+				<image :src="outDoorData.product_list[0].image_src"></image>
+			</view>
+			<view class="right-section">
+				<view class="item" v-for="(item, index) in outDoorData.product_list" :key="item" v-if="index !== 0">
+					<image :src="item.image_src" />
+				</view>
+			</view>
+		</view>
+
+		<!-- 箱包配饰 -->
+		<view class="title">
+			<image :src="bagData.floor_title.image_src"></image>
+		</view>
+
+		<view class="women-section">
+			<view class="left-section">
+				<image :src="bagData.product_list[0].image_src"></image>
+			</view>
+			<view class="right-section">
+				<view class="item" v-for="(item, index) in bagData.product_list" :key="item" v-if="index !== 0">
+					<image :src="item.image_src" />
+				</view>
+			</view>
+		</view>
+
 	</view>
 </template>
 
 <script>
-export default {
+import { getSwiperListAPI, getCateItemsAPI, getFloorListAPI } from "../../api/home/home"
 
+export default {
 	data() {
 		return {
-			list1: [
-				'https://cdn.uviewui.com/uview/swiper/swiper1.png',
-				'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-				'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-				'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-			]
+			swiperInfo: [], // 轮播图信息
+			swiperData: [], // 轮播图图片
+			cateItems: [], // 分类选项
+			womanData: [], // 时尚女装
+			outDoorData: [], // 户外活动
+			bagData: [], // 箱包配饰
 		}
 	},
 	onLoad() {
-
+		this.getSwiperDataFn()
+		this.getCateDataFn()
+		this.getFloorDataFn()
 	},
 	methods: {
+		// 获取轮播图数据
+		async getSwiperDataFn() {
+			const res = await getSwiperListAPI()
 
+			const arr = res.data.map(item => {
+				return item.image_src
+			})
+
+			this.swiperInfo = res.data
+			this.swiperData = arr
+		},
+
+		// 获取分类选项数据
+		async getCateDataFn() {
+			const res = await getCateItemsAPI()
+			this.cateItems = res.data
+		},
+
+		// 获取楼层数据
+		async getFloorDataFn() {
+			const res = await getFloorListAPI()
+			this.womanData = res.data[0]
+			this.outDoorData = res.data[1]
+			this.bagData = res.data[2]
+		},
+		// 点击轮播图携带商品id跳转到商品详情页
+		swiperClick(clickIndex) {
+			this.swiperInfo.forEach((item, index) => {
+				if (index === clickIndex) {
+					uni.navigateTo({
+						url: `/packone/goods/index?id=${this.swiperInfo[clickIndex].goods_id}`
+					})
+				}
+			})
+		}
 	}
 }
 </script>
@@ -87,7 +160,7 @@ export default {
 
 .women-section {
 	display: flex;
-	margin: 0 20rpx;
+	margin: 0 20rpx 20rpx;
 
 	.left-section {
 		margin-right: 10rpx;
