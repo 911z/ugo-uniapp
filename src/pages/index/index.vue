@@ -13,7 +13,7 @@
 
 		<!-- 选项卡 -->
 		<view class="tab-control">
-			<view class="item" v-for="item in cateItems" :key="item">
+			<view class="item" v-for="item in cateItems" :key="item.name">
 				<navigator :url="item.navigator_url ? `/pages/category/index` : `/packone/goodsList/index`"
 					:open-type="item.open_type === 'switchTab' ? 'switchTab' : 'navigate'">
 					<image :src="item.image_src" />
@@ -31,7 +31,7 @@
 				<image :src="womanData.product_list[0].image_src"></image>
 			</view>
 			<view class="right-section">
-				<view class="item" v-for="(item, index) in womanData.product_list" :key="item" v-if="index !== 0">
+				<view class="item" v-for="(item, index) in womanData.product_list" :key="item.name" v-if="index !== 0">
 					<image :src="item.image_src" />
 				</view>
 			</view>
@@ -47,7 +47,7 @@
 				<image :src="outDoorData.product_list[0].image_src"></image>
 			</view>
 			<view class="right-section">
-				<view class="item" v-for="(item, index) in outDoorData.product_list" :key="item" v-if="index !== 0">
+				<view class="item" v-for="(item, index) in outDoorData.product_list" :key="item.name" v-if="index !== 0">
 					<image :src="item.image_src" />
 				</view>
 			</view>
@@ -63,9 +63,16 @@
 				<image :src="bagData.product_list[0].image_src"></image>
 			</view>
 			<view class="right-section">
-				<view class="item" v-for="(item, index) in bagData.product_list" :key="item" v-if="index !== 0">
+				<view class="item" v-for="(item, index) in bagData.product_list" :key="item.name" v-if="index !== 0">
 					<image :src="item.image_src" />
 				</view>
+			</view>
+		</view>
+
+		<!-- 返回顶部按钮 -->
+		<view class="backTopBtn" v-if="isShowBackTopBtn" @click="backClick">
+			<view class="container">
+				<uni-icons type="top" color="#999"></uni-icons>
 			</view>
 		</view>
 
@@ -84,6 +91,8 @@ export default {
 			womanData: [], // 时尚女装
 			outDoorData: [], // 户外活动
 			bagData: [], // 箱包配饰
+			scrollTop: [], // 当前距离顶部的位置
+			isShowBackTopBtn: false // 是否显示回到顶部按钮
 		}
 	},
 	onLoad() {
@@ -92,6 +101,12 @@ export default {
 		this.getFloorDataFn()
 	},
 	methods: {
+		// 点击回到顶部按钮
+		backClick() {
+			uni.pageScrollTo({
+				scrollTop: 0,
+			})
+		},
 		// 获取轮播图数据
 		async getSwiperDataFn() {
 			const res = await getSwiperListAPI()
@@ -134,6 +149,16 @@ export default {
 		Promise.all([this.getSwiperDataFn(), this.getCateDataFn(), this.getFloorDataFn()]).then(() => {
 			uni.stopPullDownRefresh()
 		})
+	},
+	// 监听页面滚动,获取位置
+	onPageScroll(location) {
+		this.scrollTop = location.scrollTop
+		// 判断当前滚动位置是否大于全屏高度的一半
+		if (this.scrollTop > uni.getSystemInfoSync().windowHeight / 2) {
+			this.isShowBackTopBtn = true // 显示按钮
+		} else {
+			this.isShowBackTopBtn = false // 不显示按钮
+		}
 	}
 }
 </script>
@@ -192,6 +217,24 @@ export default {
 			width: 240rpx;
 			height: 250rpx;
 		}
+	}
+}
+
+.backTopBtn {
+	position: relative;
+
+	.container {
+		position: absolute;
+		bottom: 100rpx;
+		right: 20rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 70rpx;
+		height: 70rpx;
+		background-color: #f5f5f5;
+		border-radius: 50%;
+		font-size: 30rpx;
 	}
 }
 </style>
