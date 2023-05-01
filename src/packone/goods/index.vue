@@ -1,8 +1,8 @@
 <template>
-  <div class="index">goods{{ id }}</div>
+  <view>goods{{ id }}</view>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue';
 export default Vue.extend({
   components: {},
@@ -18,7 +18,6 @@ export default Vue.extend({
   // 页面周期函数--监听页面加载
   onLoad(query) { // query: 获取首页navgate传递过来的参数
     this.id = query.id
-    debugger
   },
   // 页面周期函数--监听页面初次渲染完成
   onReady() { },
