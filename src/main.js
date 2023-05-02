@@ -8,9 +8,11 @@ uni.$u.config.unit = 'rpx'
 
 import SearchBar from "./components/uni-search-bar/uni-search-bar.vue"
 import UniIcons from "./components/uni-icons/uni-icons.vue"
+import mixins from "./utils/mixins"
 
 Vue.component("SearchBar", SearchBar)
 Vue.component("UniIcons", UniIcons)
+Vue.mixin(mixins)
 
 // 调用setConfig方法，方法内部会进行对象属性深度合并，可以放心嵌套配置
 // 需要在Vue.use(uView)之后执行

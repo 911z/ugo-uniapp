@@ -48,6 +48,12 @@
 						"navigationBarTitleText": "商品列表",
 						"onReachBottomDistance": 20
 					}
+				},
+				{
+					"path": "auth/index",
+					"style": {
+						"navigationBarTitleText": "登录"
+					}
 				}
 			]
 		}
