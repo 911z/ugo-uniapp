@@ -10,7 +10,7 @@
       <view class="shop-cate">
         <scroll-view class="shopTitle left" scroll-y>
           <view class="title" v-for="(item, index) in data" :key="item.cat_id" @click="changeSelected(index)">
-            <text :class="selected === index ? 'active' : ''">{{ item.cat_name }}</text>
+            <view :class="selected === index ? 'active' : ''">{{ item.cat_name }}</view>
           </view>
         </scroll-view>
 
@@ -117,6 +117,11 @@ export default Vue.extend({
 
 .shopTitle.left {
   width: 150rpx;
+
+  text {
+    width: 150rpx;
+    height: 100rpx;
+  }
 }
 
 .shopTitle.right {

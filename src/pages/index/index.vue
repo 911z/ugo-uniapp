@@ -3,7 +3,7 @@
 
     <!-- 搜索框 -->
     <view class="search-section">
-      <search-bar />
+      <search-bar @click="gotoSearch" />
     </view>
 
     <!-- 轮播图 -->
@@ -101,6 +101,11 @@ export default {
     this.getFloorDataFn()
   },
   methods: {
+    gotoSearch() {
+      uni.navigateTo({
+        url: "/packone/search/index"
+      })
+    },
     // 点击回到顶部按钮
     backTopBtnClick() {
       uni.pageScrollTo({
